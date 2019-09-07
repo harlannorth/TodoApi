@@ -41,7 +41,7 @@ namespace TodoApi.Controllers
             var insertValue = new TodoItem {
                 Id = TodoCount.Value,
                 IsComplete = value.IsComplete,
-                Name = value.Name
+                Title = value.Title
             };
 
             if (!Todos.TryAdd(TodoCount.Value, insertValue))
