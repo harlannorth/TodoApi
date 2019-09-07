@@ -29,7 +29,7 @@ namespace TodoApi.Controllers
 
         }
 
-        // POST api/values
+        // POST api/todos
         [HttpPost]
         public TodoItem Post([FromBody] TodoItem value)
         {
@@ -53,7 +53,7 @@ namespace TodoApi.Controllers
             return insertValue;
         }
 
-        // GET api/values
+        // GET api/todos
         [HttpGet]
         public ActionResult<IEnumerable<TodoItem>> Get()
         {
@@ -63,6 +63,64 @@ namespace TodoApi.Controllers
             }
 
             return Todos.Values;
+        }
+
+        // GET api/todos/5
+        [HttpGet("{id}")]
+        public ActionResult<TodoItem> Get(long id)
+        {
+            if (Todos == null)
+            {
+                return null;
+            }
+    
+            if (Todos.TryGetValue(id, out var todo))
+            {
+                return todo;
+            }                
+
+            return null;
+        }
+
+        // PUT api/todos/5
+        [HttpPut("{id}")]
+        public TodoItem Put(long id, [FromBody] TodoItem value)
+        {
+            if (Todos == null)
+            {
+                throw new Exception("Todos is null");
+            }
+
+            if (id != value.Id)
+            {
+                throw new Exception("Id and Todo Id mismatch");
+            }
+
+            if (!Todos.ContainsKey(id))
+            {
+                throw new Exception("Todo doesn't exist");
+            }
+
+            Todos.Remove(id);
+            Todos.Add(id, value);
+            return Todos[id];    
+
+        }
+
+        // DELETE api/values/5
+        [HttpDelete("{id}")]
+        public void Delete(long id)
+        {
+            if (Todos == null)
+            {
+                throw new Exception("Todos is null");
+            }
+
+            if (!Todos.ContainsKey(id))
+            {
+                throw new Exception("Todo doesn't exist");
+            }
+            Todos.Remove(id);
         }
 
     }
